@@ -4,7 +4,6 @@
     <a href="https://google.com"><img src="https://media.discordapp.net/attachments/773034661923913728/824139172948213760/unknown.png" alt="discord-astron" /></a>
   <p>
   <br />
-  </style>
 </div>
 
 ## discord-astron
@@ -36,5 +35,7 @@ TBC
 
 ## Help
 You can get support at the official Astron Studios Discord support server. For discord.js-related issues you can get support in the official discord.js server.
+
 [**discord-astron Support Server**](https://discord.gg/vsfXUwsXph/)
+
 [**discord.js Support Server**](https://discord.gg/bRCvFy9)

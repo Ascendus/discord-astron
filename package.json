@@ -1,0 +1,49 @@
+{
+  "name": "discord-astron",
+  "version": "1.0.0",
+  "description": "A simplified discord-akairo framework for discord.js for beginners.",
+  "main": "./src/index",
+  "exports": {
+    ".": [
+      {
+        "require": "./src/index.js",
+        "import": "./esm/discord.mjs"
+      },
+      "./src/index.js"
+    ],
+    "./esm": "./esm/discord.mjs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test:typescript": "tsc",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Astron-Studios/discord-astron.git"
+  },
+  "keywords": [
+    "astron",
+    "discord.js",
+    "discord-akairo",
+    "discord-astron",
+    "discord",
+    "api",
+    "bot",
+    "client"
+  ],
+  "author": "Archreus (Astron Studios) <archreus.dev@gmail.com | astraon.studios@gmail.com>",
+  "license": "CC0 1.0 Universal",
+  "bugs": {
+    "url": "https://github.com/Astron-Studios/discord-astron/issues"
+  },
+  "homepage": "https://github.com/Astron-Studios/discord-astron#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.22.0",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
+  }
+}

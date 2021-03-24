@@ -36,5 +36,5 @@ TBC
 ## Help
 You can get support at the official Astron Studios Discord support server. For discord.js-related issues you can get support in the official discord.js server.
 
-[**discord-astron Support Server**](https://discord.gg/vsfXUwsXph/)
-[**discord.js Support Server**](https://discord.gg/bRCvFy9)
+* [**discord-astron Support Server**](https://discord.gg/vsfXUwsXph/)
+* [**discord.js Support Server**](https://discord.gg/bRCvFy9)

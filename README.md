@@ -6,7 +6,7 @@
   <br />
 </div>
 
-## discord-astron
+## About
 discord-astron is a simplified discord.js framework based on discord-akairo and discord.js by Astron Studios, for beginners. 
 
 ## Installation 

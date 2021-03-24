@@ -1,7 +1,7 @@
 {
-  "name": "discord-astron",
+  "name": "@astron-studios/discord-astron",
   "version": "1.0.0",
-  "description": "A simplified discord-akairo framework for discord.js for beginners.",
+  "description": "  .",
   "main": "./src/index",
   "exports": {
     ".": [
@@ -33,8 +33,8 @@
     "bot",
     "client"
   ],
-  "author": "Archreus (Astron Studios) <archreus.dev@gmail.com | astraon.studios@gmail.com>",
-  "license": "CC0 1.0 Universal",
+  "author": "Archreus <archreus.dev@gmail.com | astraon.studios@gmail.com> (Astron Studios)",
+  "license": "SEE LICENSE IN README.MD",
   "bugs": {
     "url": "https://github.com/Astron-Studios/discord-astron/issues"
   },
@@ -45,5 +45,6 @@
     "eslint": "^7.22.0",
     "fs": "^0.0.1-security",
     "path": "^0.12.7"
-  }
+  },
+  "devDependencies": {}
 }

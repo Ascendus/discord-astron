@@ -20,8 +20,6 @@ declare module "discord-astron" {
     */
     export const version: string;
 
-    //#region Classes
-
     /**
      * The main discord-astron class, extended from discord.js.
      * @class 
@@ -311,6 +309,4 @@ declare module "discord-astron" {
         public capitalize(): Promise<string>;
         public getDateSuffix(): Promise<"th" | "st" | "nd" | "rd">;
     }
-
-    //#endregion
 }

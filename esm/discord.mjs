@@ -11,5 +11,14 @@ export const {
     Listener, 
     ListenerHandler,
     Utilities,
-    version
+    version,
+    description,
+    homepage,
+    npmURL,
+    githubIssuesURL,
+    keywords,
+    author,
+    publisher,
+    license,
+    dependencies
 } = DiscordAstron;

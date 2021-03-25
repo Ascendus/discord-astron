@@ -1,8 +1,9 @@
 {
-  "name": "@astron-studios/discord-astron",
-  "version": "1.0.0",
-  "description": "  .",
+  "name": "discord-astron",
+  "version": "1.0.3",
+  "description": "discord-astron is a simplified discord.js framework based on discord-akairo and discord.js by Astron Studios for beginners.",
   "main": "./src/index",
+  "private": false,
   "exports": {
     ".": [
       {
@@ -34,7 +35,7 @@
     "client"
   ],
   "author": "Archreus <archreus.dev@gmail.com | astraon.studios@gmail.com> (Astron Studios)",
-  "license": "SEE LICENSE IN README.MD",
+  "license": "CC-BY-1.0",
   "bugs": {
     "url": "https://github.com/Astron-Studios/discord-astron/issues"
   },

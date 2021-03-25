@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const { readdirSync } = require('fs');
-const { Category } = require('../structures/category');
+const Category = require('../struct/Category');
 
 class CommandHandler {
     constructor(client, {

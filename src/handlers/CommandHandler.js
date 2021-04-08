@@ -1,130 +1,136 @@
 const Discord = require('discord.js');
 const { readdirSync } = require('fs');
-const Category = require('../struct/Category');
+const { Category } = require('../struct/Category');
 
+/**
+ * The command handler class for the client. Saves or updates commands and categories to the command and category collections, as well as running permission/cooldown checks.
+ */
 class CommandHandler {
-    constructor(client, {
-        directory = "",
-        prefix = "", 
-        blockBots = true,
-        allowDirectMessages = true, 
-        allowMention = false,
-        directMessageWarning = "", 
-        guildOnlyWarning = "",
-        ownerOnlyWarning = "",
-        missingSendPermissions = "",
-        clientPermissionsMissing = "", 
-        userPermissionsMissing = "", 
-        cooldownMessage = ""
-    }) {
-        /**The extended discord.js Client class.
-         * @type {Client} 
+    /**
+     * The command handler class for the client. Saves or updates commands and categories to the command and category collections, as well as running permission/cooldown checks.
+     * @param {AstronClient} client 
+     * @param {import("discord-astron").CommandHandlerOptions} commandHandlerOptions The options for the command handler
+     */
+    constructor(client, commandHandlerOptions) {
+
+        /**
+         * The Astron client.
          * @type {AstronClient}
          */
         this.client = client;
 
-        /**The directory of commands to save to the command Collection and execute.
+        /**
+         * The directory of commands to save to the command collection and execute.
          * @type {string}
          */
-        this.directory = directory;
+        this.directory = commandHandlerOptions.directory;
 
-        /**The prefix for all commands executed.
-         * @type {string}
-         * @type {function}
+        /**
+         * The prefix for triggering commands.
+         * @type {string | Function}
          */
-        this.prefix = prefix;
+        this.prefix = commandHandlerOptions.prefix;
 
-        /**Determines whether to block bots from using commands.
+        /**
+         * Determines whether to block bots from using commands.
          * @type {boolean}
          */
-        this.blockBots = blockBots || true;
+        this.blockBots = commandHandlerOptions.blockBots || true;
 
-        /**Determines whether to allow commands run in direct messages with the bot.
+        /**
+         * Determines whether to allow commands run in direct message channels.
          * @type {boolean}
          */
-        this.allowDirectMessages = allowDirectMessages || true;
+        this.allowDirectMessages = commandHandlerOptions.allowDirectMessages || true;
 
-        /**Determines whether the client's user mention can be used as a prefix.
+        /**
+         * Determines whether the client's user mention can be used as a prefix.
          * @type {boolean}
          */
-        this.allowMention = allowMention || true;
+        this.allowMention = commandHandlerOptions.allowMention || true;
 
-        /**The message to send upon a user running commands in direct messages if disabled.
-         * @type {string}
-         * @type {function}
+        /**
+         * The message to send upon a user running commands in direct messages if disabled.
+         * @type {string | Function}
          */
-        this.directMessageWarning = directMessageWarning;
+        this.directMessageWarning = commandHandlerOptions.directMessageWarning;
 
-        /**A message to warn a user when a command only meant to be used in servers is run in a dm.
-         * @type {string}
-         * @type {Function}
+        /**
+         * A message to warn a user when a command only meant to be used in servers is run in a dm.
+         * @type {string | Function}
          */
-        this.guildOnlyWarning = guildOnlyWarning;
+        this.guildOnlyWarning = commandHandlerOptions.guildOnlyWarning;
 
-        /**A message to warn a non-owner running a owner only command.
-         * @type {string}
-         * @type {Function}
+        /**
+         * A message to warn a non-owner running a owner only command.
+         * @type {string | Function}
          */
-        this.ownerOnlyWarning = ownerOnlyWarning;
+        this.ownerOnlyWarning = commandHandlerOptions.ownerOnlyWarning;
 
-        /**Sends a warning message to the dm of the user who runs a command but the client is missing the SEND_MESSAGES permission.
-         * @type {string}
-         * @type {Function}
+        /**
+         * Sends a warning message to the dm of the user who runs a command but the client is missing the SEND_MESSAGES permission.
+         * @type {string | Function}
          */
-        this.missingSendPermissions = missingSendPermissions;
+        this.missingSendPermissions = commandHandlerOptions.missingSendPermissions;
 
-        /**Sends a message to the user if the client is missing permissions for a command.
-         * @type {string}
-         * @type {Function}
+        /**
+         * Sends a message to the user if the client is missing permissions for a command.
+         * @type {string | Function}
          */
-        this.clientPermissionsMissing = clientPermissionsMissing;
+        this.clientPermissionsMissing = commandHandlerOptions.clientPermissionsMissing;
 
-        /**Sends a message to the user if the user is missing permissions for a command.
-         * @type {string}
-         * @type {Function}
+        /**
+         * Sends a message to the user if the user is missing permissions for a command.
+         * @type {string | Function}
          */
-        this.userPermissionsMissing = userPermissionsMissing;
+        this.userPermissionsMissing = commandHandlerOptions.userPermissionsMissing;
 
-        /**Warns a user when the person executing the command exceeds the cooldown limit.
-         * @type {string}
-         * @type {Function}
+        /**
+         * Warns a user when the person executing the command exceeds the cooldown limit.
+         * @type {string | Function}
          */
-        this.cooldownMessage = cooldownMessage;
+        this.cooldownMessage = commandHandlerOptions.cooldownWarning;
 
-        /** The command collection to store the commands for the client.
+        /**
+         * The command collection to store the commands for the client.
          * @type {Discord.Collection}
         */
         this.commands = new Discord.Collection();
 
-        /** The command alias collection to store command name aliases for each command.
+        /** 
+         * The command alias collection to store command name aliases for each command.
          * @type {Discord.Collection}
         */
         this.aliases = new Discord.Collection();
 
-        /** The cooldown collection to prevent command spam
-         * @type {Discord.Collection}
-        */
-        this.commandCooldown = new Discord.Collection();
+        /** 
+         * The collection of command cooldowns.
+         * @type {Collection}
+         */
+        this.commandCooldowns = new Discord.Collection();
         
-        /** The category collection. 
-         * @type {Discord.Collection}
-        */
+        /** 
+         * The collection of command categories.
+         * @type {Collection}
+         */
         this.categories = new Discord.Collection();
 
-        /** Loads all command files and saves them to the command collection. Also executes commands in a message event, as well as running permission and cooldown checks and warnings.
-         * @type {Function}
-         * @returns
-        */
+        /**
+         * Executes the command using the provided parameters.
+         * @param {any[]} [args] The commnad parameters
+         * @type {Promise<void>}
+         */
         this.load = async () => {
             try {
                 // Sets or updates categories and commands to the command and categories collections.
-                ["configuration", "information"].forEach(category => {
-                    this.categories.set(this.client.util.capitalize(category), new Category(this.client.util.capitalize(category, null))); // Creates category classes for each category.
+                const categories = ["configuration", "information"];
+                categories.forEach(async category => {
+                    this.categories.set(await this.client.util.capitalize(category), new Category(await this.client.util.capitalize(category), null)); // Creates category classes for each category.
                 });
 
-                for (const category of this.categories.values()) {
-                    for (const command of readdirSync(`${this.directory}/${(await category.id).toLowerCase()}`).filter(fileName => fileName.endsWith(".js"))) { // Creates a constant for each command file.
-                        const commandFile = require(`${this.directory}/${(await category.id).toLowerCase()}/${command}`); // The command file.
+                for (const category of categories.values()) {
+                    for (const command of readdirSync(`${this.directory}/${category.toLowerCase()}`).filter(fileName => fileName.endsWith(".js"))) { // Creates a constant for each command file.
+                        const commandFile = require(`${this.directory}/${category.toLowerCase()}/${command}`); // The command file.
                         this.commands.set(new commandFile(this.client).id.toLowerCase(), commandFile); // Creates a new instance of the command class exported from the command file and sets it to the command collection.
 
                         if (new commandFile(this.client).aliases) {
@@ -134,8 +140,8 @@ class CommandHandler {
                         };
                     };
 
-                    this.categories.set(this.client.util.capitalize(await category.id), new Category(this.client.util.capitalize(await category.id), this.commands.filter(async cmd => new cmd(this.client).category.toLowerCase() === (await category.id).toLowerCase()))); // Sets the commands with matching categories to each category in the category collection.
-                    console.log(`${await this.client.util.time()} | [ ${await this.client.util.capitalize((await category.id))} Module ] Loaded ${readdirSync(`${this.directory}/${(await category.id).toLowerCase()}`).length} command(s)`); // Logs successful message to the console.
+                    this.categories.set(await this.client.util.capitalize(category), new Category(await this.client.util.capitalize(category), this.commands.filter(async cmd => new cmd(this.client).categoryID.toLowerCase() === category.toLowerCase()))); // Sets the commands with matching categories to each category in the category collection.
+                    console.log(`${await this.client.util.time()} | [ ${await this.client.util.capitalize(category)} Module ] Loaded ${readdirSync(`${this.directory}/${category}`).length} command(s)`); // Logs successful message to the console.
                 };
 
                 // Message event
@@ -187,13 +193,12 @@ class CommandHandler {
         };
 
         /**
-         * A command handler function for reloading a given command.
-         * @param {string} commandName The name of the command to be reloaded.
+         * Fetches a command via parameters and reloads it.
+         * @param {string | import("discord-astron").Command} command The command to search for
          * @type {Promise<void>}
-         * @type {Function}
          */
-        this.reloadCommand = async (commandName) => {
-            const commandFile = require(`${this.directory}/${commandName}.js`); // The command file.
+        this.reloadCommand = async (command) => {
+            const commandFile = require(`${this.directory}/${command}.js`); // The command file.
             this.commands.set(new commandFile(this.client).id, commandFile); // Sets the command to the command collection.
 
             if (new commandFile(this.client).aliases) for (const alias of new commandFile(this.client).aliases) {
@@ -202,9 +207,8 @@ class CommandHandler {
         };
 
         /**
-         * A command handler function for reloading all commands.
+         * Fetches all commands and reloads them.
          * @type {Promise<void>}
-         * @type {Function}
          */
         this.reloadAll = async () => {
             for (const command of readdirSync(this.directory).filter(fileName => fileName.endsWith(".js"))) {
@@ -218,13 +222,9 @@ class CommandHandler {
         };
 
         /**
-         * A useful command handler utility function to search for a command.
-         * Returns a boolean value.
-         * @param {string} searchQuery The command name to search for.
-         * @argument searchQuery The command name to search for.
-         * @type {Promise<any>}
-         * @type {Function} 
-         * @returns
+         * Fetches a certain command by searching through the command collection
+         * @param {string | Command} command
+         * @type {Promise<Command>}
          */
         this.fetchCommand = async (searchQuery) => {
             const command = this.commands.get(searchQuery.toLowerCase()) || this.aliases.get(searchQuery.toLowerCase()); // Searches for the command in the commands or aliases collection/
@@ -233,4 +233,4 @@ class CommandHandler {
     };
 };
 
-module.exports = CommandHandler; 
+module.exports.CommandHandler = CommandHandler; // Exporting the CommandHandler class

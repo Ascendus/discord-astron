@@ -14,8 +14,8 @@ discord-astron is a simplified discord.js framework based on discord-akairo and 
 
 ## Example Usage
 ```javascript
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const Astron = require("discord-astron");
+const client = new Astron.Client();
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);

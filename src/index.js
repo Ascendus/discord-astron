@@ -2,26 +2,33 @@
 
 module.exports = {
     // Main classes
-    AstronClient: require("./client/AstronClient"),
-    Configuration: require("./client/Config"),
+    AstronClient: require("./client/AstronClient").AstronClient,
+    Configuration: require("./client/Config").Configuration,
 
     // Handlers
-    CommandHandler: require("./handlers/CommandHandler"),
-    ListenerHandler: require("./handlers/ListenerHandler"),
+    CommandHandler: require("./handlers/CommandHandler").CommandHandler,
+    ListenerHandler: require("./handlers/ListenerHandler").ListenerHandler,
 
     // Structures
-    Category: require("./struct/Category"),
-    Command: require("./struct/Command"),
-    Listener: require("./struct/Listener"),
+    Category: require("./struct/Category").Category,
+    Command: require("./struct/Command").Command,
+    Listener: require("./struct/Listener").Listener,
 
     // Utilities
-    Utilities: require("./util/Utilities"),
+    GuildHandler: require("./util/GuildHandler").GuildHandler,
+    Utilities: require("./util/Utilities").Utilities,
+
+    // Providers from discord-akairo module by 1Computer1
+    Provider: require("./providers/Provider").Provider,
+    MongooseProvider: require("./providers/MongooseProvider").MongooseProvider,
+    SequelizeProvider: require("./providers/SequelizeProvider").SequelizeProvider,
+    SQLiteProvider: require("./providers/SQLiteProvider").SQLiteProvider,
 
     // Package information
     version: require("../package.json").version,
     description: require("../package.json").description,
     homepage: require("../package.json").homepage,
-    npmURL: `https://www.npmjs.com/package/${require("../package.json").name}`,
+    npmURL: `https://www.npmjs.com/package/${require("../package.json").name.toLowerCase()}`,
     githubIssuesURL: require("../package.json").bugs.url,
     keywords: require("../package.json").keywords,
     author: "<Archreus />#6316 (archreus.dev@gmail.com)",

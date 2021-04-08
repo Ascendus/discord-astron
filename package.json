@@ -40,12 +40,12 @@
     "url": "https://github.com/Astron-Studios/discord-astron/issues"
   },
   "homepage": "https://github.com/Astron-Studios/discord-astron#readme",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "eslint": "^7.22.0",
     "fs": "^0.0.1-security",
     "path": "^0.12.7"
-  },
-  "devDependencies": {}
+  }
 }

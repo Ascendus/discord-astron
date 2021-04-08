@@ -18,6 +18,7 @@
 		"no-multi-spaces": "error",
 		"no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 0 }],
 		"no-shadow": ["error", { "allow": ["err", "resolve", "reject"] }],
+		"no-unused-vars": "off",
 		"no-var": "error",
         "no-extra-semi":"off",
 		"object-curly-spacing": ["error", "always"],
